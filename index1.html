@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Rifrush: Affordable AI audio mastering service. Fast, easy, and professional sound for musicians. Cheaper and better than eMastered with free previews and custom tweaks.">
+    <meta name="keywords" content="AI mastering, audio mastering online, free music mastering, cheap mastering service, professional audio mastering, AI music tools, mastering for Spotify, online mastering app">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Rifrush - AI Audio Mastering: Faster, Cheaper, Pro Sound">
+    <meta property="og:description" content="Master your tracks instantly with AI. Free previews, custom controls, and unlimited plans starting at $5/month. Perfect for indie musicians and producers.">
+    <meta property="og:image" content="https://rifrush.com/assets/og-image.jpg"> <!-- Replace with actual image URL -->
+    <meta property="og:url" content="https://rifrush.com">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Rifrush - AI Audio Mastering">
+    <meta name="twitter:description" content="Affordable AI mastering for pro sound. Try free now!">
+    <meta name="twitter:image" content="https://rifrush.com/assets/twitter-image.jpg"> <!-- Replace with actual -->
+    <link rel="canonical" href="https://rifrush.com">
+    <title>Rifrush - AI Audio Mastering: Faster, Cheaper, Pro Sound</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap">
+    <link rel="icon" href="https://rifrush.com/favicon.ico" type="image/x-icon"> <!-- Add favicon -->
+    <!-- Google Analytics (replace G-XXXXXXX with your ID) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXX');
+    </script>
+    <style>
+        :root {
+            --bg-primary: #0a0a0a; /* Dark mode default */
+            --bg-secondary: #1a1a1a;
+            --accent: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --border: #333;
+            --shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        body.light-mode {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f0f0f0;
+            --text-primary: #0a0a0a;
+            --text-secondary: #606060;
+            --border: #ddd;
+            --shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; transition: all 0.3s; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        /* Header */
+        header { background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); position: fixed; width: 100%; top: 0; z-index: 100; transition: all 0.3s; }
+        header.scrolled { background: var(--bg-secondary); }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; }
+        .logo { font-size: 1.5rem; font-weight: 700; background: var(--accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-links { display: flex; list-style: none; gap: 2rem; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--text-primary); }
+        .cta-header { background: var(--accent); padding: 0.5rem 1rem; border-radius: 50px; color: white; text-decoration: none; font-weight: 600; transition: transform 0.3s; min-height: 48px; display: flex; align-items: center; }
+        .cta-header:hover { transform: scale(1.05); }
+        .mobile-menu { display: none; cursor: pointer; font-size: 1.5rem; color: var(--text-primary); }
+        @media (max-width: 768px) { .nav-links { display: none; flex-direction: column; position: absolute; top: 60px; right: 0; background: var(--bg-secondary); width: 200px; padding: 1rem; gap: 1rem; } .nav-links.show { display: flex; } .mobile-menu { display: block; } }
+        
+        /* Mode Toggle */
+        .mode-toggle { display: flex; align-items: center; gap: 0.5rem; margin-left: 1rem; }
+        .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 20px; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #2196F3; }
+        input:checked + .slider:before { transform: translateX(20px); }
+        
+        /* Hero */
+        .hero { padding: 120px 0 80px; text-align: center; background: linear-gradient(to bottom, var(--bg-primary), var(--bg-secondary)); }
+        .hero h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 700; margin-bottom: 1rem; }
+        .hero p { font-size: 1.2rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto 2rem; }
+        .upload-area { background: var(--bg-secondary); border: 2px dashed var(--border); border-radius: 20px; padding: 3rem; margin: 2rem auto; max-width: 500px; transition: all 0.3s; cursor: pointer; }
+        .upload-area:hover { border-color: #ff6b6b; background: rgba(255,107,107,0.1); }
+        .upload-area.dragover { border-color: #4ecdc4; background: rgba(78,205,196,0.1); }
+        .upload-icon { font-size: 3rem; margin-bottom: 1rem; display: block; }
+        .cta-hero { background: var(--accent); padding: 1rem 2rem; border-radius: 50px; color: white; font-size: 1.1rem; font-weight: 600; text-decoration: none; display: inline-block; transition: all 0.3s; min-height: 48px; display: flex; align-items: center; justify-content: center; }
+        .cta-hero:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+        
+        /* Features */
+        .features { padding: 80px 0; background: var(--bg-secondary); }
+        .features h2 { text-align: center; font-size: 2.5rem; margin-bottom: 3rem; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .feature { text-align: center; padding: 2rem; background: var(--bg-primary); border-radius: 15px; transition: all 0.3s; }
+        .feature:hover { transform: translateY(-10px); box-shadow: var(--shadow); }
+        .feature-icon { font-size: 3rem; background: var(--accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
+        .feature h3 { font-size: 1.5rem; margin-bottom: 1rem; }
+        
+        /* How it Works */
+        .how { padding: 80px 0; }
+        .how h2 { text-align: center; font-size: 2.5rem; margin-bottom: 3rem; }
+        .steps { display: flex; flex-direction: column; gap: 2rem; }
+        @media (min-width: 768px) { .steps { flex-direction: row; justify-content: space-around; } }
+        .step { flex: 1; text-align: center; position: relative; }
+        .step::before { content: ''; position: absolute; top: 50%; left: -50%; width: 100px; height: 2px; background: var(--accent); z-index: -1; }
+        .step:nth-child(1)::before { left: 0; }
+        .step-number { background: var(--accent); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-weight: 700; }
+        .step h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+        
+        /* Pricing */
+        .pricing { padding: 80px 0; background: var(--bg-secondary); }
+        .pricing h2 { text-align: center; font-size: 2.5rem; margin-bottom: 3rem; }
+        .pricing-toggle { text-align: center; margin-bottom: 2rem; }
+        .toggle { display: inline-flex; background: var(--bg-primary); border-radius: 50px; overflow: hidden; }
+        .toggle-btn { padding: 0.5rem 1.5rem; background: none; border: none; color: var(--text-secondary); cursor: pointer; transition: all 0.3s; min-height: 48px; display: flex; align-items: center; }
+        .toggle-btn.active { background: var(--accent); color: white; }
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+        .price-card { background: var(--bg-primary); border-radius: 15px; padding: 2rem; text-align: center; border: 2px solid transparent; transition: all 0.3s; }
+        .price-card.popular { border-color: #ff6b6b; transform: scale(1.05); }
+        .price-card:hover { border-color: var(--accent); }
+        .price-amount { font-size: 3rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .price-period { color: var(--text-secondary); }
+        .price-features { list-style: none; margin: 1rem 0; }
+        .price-features li { padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+        .cta-price { background: var(--accent); padding: 1rem 2rem; border-radius: 50px; color: white; text-decoration: none; display: inline-block; margin-top: 1rem; transition: all 0.3s; min-height: 48px; display: flex; align-items: center; justify-content: center; }
+        .cta-price:hover { transform: translateY(-2px); }
+        
+        /* Testimonials */
+        .testimonials { padding: 80px 0; }
+        .testimonials h2 { text-align: center; font-size: 2.5rem; margin-bottom: 3rem; }
+        .testimonial-carousel { position: relative; overflow: hidden; max-width: 800px; margin: 0 auto; touch-action: pan-y; } /* Touch optimize */
+        .slides { display: flex; transition: transform 0.5s; }
+        .slide { min-width: 100%; padding: 2rem; text-align: center; opacity: 0.7; transition: opacity 0.5s; }
+        .slide.active { opacity: 1; }
+        .quote { font-size: 1.2rem; font-style: italic; margin-bottom: 1rem; }
+        .author { font-weight: 600; color: var(--accent); }
+        .nav-dots { display: flex; justify-content: center; gap: 0.5rem; margin-top: 1rem; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--text-secondary); cursor: pointer; transition: background 0.3s; }
+        .dot.active { background: var(--accent); }
+        
+        /* Footer */
+        footer { background: var(--bg-primary); padding: 2rem 0; text-align: center; border-top: 1px solid var(--border); }
+        .footer-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: 1rem; }
+        .footer-links a { color: var(--text-secondary); text-decoration: none; }
+        
+        /* Animations */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeInUp 0.6s ease-out; }
+        
+        /* Responsive */
+        @media (max-width: 768px) { .steps { gap: 1rem; } .step::before { display: none; } }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">Rifrush</div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how">How It Works</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="/login">Login</a></li>
+            </ul>
+            <a href="/upload" class="cta-header">Start Free</a>
+            <div class="mode-toggle">
+                <label class="switch">
+                    <input type="checkbox" id="modeSwitch">
+                    <span class="slider"></span>
+                </label>
+                <span>Dark/Light</span>
+            </div>
+            <div class="mobile-menu">☰</div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1 class="fade-in">Master Your Music Effortlessly</h1>
+            <p class="fade-in">AI-powered mastering that's 3x faster and 50% cheaper than eMastered. Upload, preview, download – pro sound in seconds. No account needed for first track.</p>
+            <div class="upload-area fade-in" id="uploadArea">
+                <span class="upload-icon">🎵</span>
+                <p>Drag & drop your track or <strong>click to upload</strong><br>(MP3, WAV – up to 10min free)</p>
+                <input type="file" id="fileInput" accept="audio/*" style="display: none;">
+            </div>
+            <a href="/upload" class="cta-hero fade-in">Try Free Preview Now</a>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="fade-in">Why Rifrush Beats the Rest</h2>
+            <div class="features-grid">
+                <div class="feature fade-in">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Instant Results</h3>
+                    <p>AI analyzes and masters in under 30s – no waiting queues like others.</p>
+                </div>
+                <div class="feature fade-in">
+                    <div class="feature-icon">💰</div>
+                    <h3>Affordable Pricing</h3>
+                    <p>From $5/track or $29/year unlimited. Free previews forever.</p>
+                </div>
+                <div class="feature fade-in">
+                    <div class="feature-icon">🎛️</div>
+                    <h3>Custom Controls</h3>
+                    <p>Tweak EQ, compression, loudness with sliders – more flexible than basic AI.</p>
+                </div>
+                <div class="feature fade-in">
+                    <div class="feature-icon">📱</div>
+                    <h3>Mobile & Easy</h3>
+                    <p>Works on any device. Simple interface – upload, choose genre, done.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="how" class="how">
+        <div class="container">
+            <h2 class="fade-in">How It Works (3 Simple Steps)</h2>
+            <div class="steps">
+                <div class="step fade-in">
+                    <div class="step-number">1</div>
+                    <h3>Upload Your Track</h3>
+                    <p>Drag any audio file – we handle everything automatically.</p>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-number">2</div>
+                    <h3>Preview & Tweak</h3>
+                    <p>Hear before/after. Adjust for your genre (rock, EDM, pop presets).</p>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-number">3</div>
+                    <h3>Download Pro Master</h3>
+                    <p>Export in high-res (24-bit). Ready for Spotify, YouTube, anywhere.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <h2 class="fade-in">Simple, Transparent Pricing</h2>
+            <div class="pricing-toggle">
+                <div class="toggle">
+                    <button class="toggle-btn active" data-period="monthly">Monthly</button>
+                    <button class="toggle-btn" data-period="yearly">Yearly</button>
+                </div>
+            </div>
+            <div class="pricing-grid">
+                <div class="price-card fade-in">
+                    <h3>Free Trial</h3>
+                    <div class="price-amount">$0</div>
+                    <div class="price-period">Forever</div>
+                    <ul class="price-features">
+                        <li>1 free master/month</li>
+                        <li>Basic preview</li>
+                        <li>Watermark</li>
+                    </ul>
+                    <a href="/upload" class="cta-price">Start Free</a>
+                </div>
+                <div class="price-card popular fade-in">
+                    <h3>Pro</h3>
+                    <div class="price-amount" data-monthly="$9" data-yearly="$5">9</div>
+                    <div class="price-period" data-monthly="/month" data-yearly="/month (billed yearly)">/month</div>
+                    <ul class="price-features">
+                        <li>Unlimited masters</li>
+                        <li>Full custom tweaks</li>
+                        <li>No watermark, high-res export</li>
+                        <li>Genre presets + stems</li>
+                    </ul>
+                    <a href="/pricing" class="cta-price">Get Pro</a>
+                </div>
+                <div class="price-card fade-in">
+                    <h3>Enterprise</h3>
+                    <div class="price-amount" data-monthly="$19" data-yearly="$12">19</div>
+                    <div class="price-period" data-monthly="/month" data-yearly="/month (billed yearly)">/month</div>
+                    <ul class="price-features">
+                        <li>All Pro + API access</li>
+                        <li>Team accounts</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <a href="/contact" class="cta-price">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="fade-in">What Musicians Say</h2>
+            <div class="testimonial-carousel">
+                <div class="slides" id="slides">
+                    <div class="slide active">
+                        <div class="quote">"Rifrush turned my demo into radio-ready – cheaper and faster than anything else!"</div>
+                        <div class="author">- Alex K., Indie Producer</div>
+                    </div>
+                    <div class="slide">
+                        <div class="quote">"Love the custom sliders. Finally, AI that listens to my tweaks."</div>
+                        <div class="author">- Maria L., EDM Artist</div>
+                    </div>
+                    <div class="slide">
+                        <div class="quote">"Free previews sealed the deal. Pro sound without breaking the bank."</div>
+                        <div class="author">- Jamal T., Podcaster</div>
+                    </div>
+                </div>
+                <div class="nav-dots" id="dots"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="/privacy">Privacy</a>
+                <a href="/terms">Terms</a>
+                <a href="/support">Support</a>
+            </div>
+            <p>&copy; 2025 Rifrush. All rights reserved. Made with ❤️ for musicians.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            document.querySelector('header').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Mobile menu
+        document.querySelector('.mobile-menu').addEventListener('click', () => {
+            document.querySelector('.nav-links').classList.toggle('show');
+        });
+
+        // Dark/Light mode
+        const modeSwitch = document.getElementById('modeSwitch');
+        const body = document.body;
+        if (localStorage.getItem('theme') === 'light') {
+            body.classList.add('light-mode');
+            modeSwitch.checked = true;
+        }
+        modeSwitch.addEventListener('change', () => {
+            body.classList.toggle('light-mode');
+            localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : 'dark');
+        });
+
+        // Upload drag&drop
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, preventDefaults, false);
+        });
+        function preventDefaults(e) { e.preventDefault(); e.stopPropagation(); }
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, () => uploadArea.classList.add('dragover'), false);
+        });
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, () => uploadArea.classList.remove('dragover'), false);
+        });
+        uploadArea.addEventListener('drop', handleDrop, false);
+        uploadArea.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => { if (e.target.files[0]) alert('File selected! Redirecting to master...'); });
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            if (files[0].type.startsWith('audio/')) {
+                fileInput.files = files;
+                alert('Audio uploaded! Processing...');
+            }
+        }
+
+        // Pricing toggle
+        const toggleBtns = document.querySelectorAll('.toggle-btn');
+        const priceAmounts = document.querySelectorAll('.price-amount');
+        const pricePeriods = document.querySelectorAll('.price-period');
+        toggleBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                toggleBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const period = btn.dataset.period;
+                priceAmounts.forEach((amt, i) => {
+                    amt.textContent = period === 'yearly' ? amt.dataset.yearly : amt.dataset.monthly;
+                });
+                pricePeriods.forEach((per, i) => {
+                    per.textContent = period === 'yearly' ? per.dataset.yearly : per.dataset.monthly;
+                });
+            });
+        });
+
+        // Testimonials carousel with swipe
+        const carousel = document.querySelector('.testimonial-carousel');
+        const slidesContainer = document.getElementById('slides');
+        const slides = slidesContainer.children;
+        const dotsContainer = document.getElementById('dots');
+        let currentSlide = 0;
+        let touchStartX = 0;
+        let touchEndX = 0;
+        for (let i = 0; i < slides.length; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(i));
+            dotsContainer.appendChild(dot);
+        }
+        const dots = dotsContainer.children;
+        function goToSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+            slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+        carousel.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; });
+        carousel.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            if (touchStartX - touchEndX > 50) goToSlide(currentSlide + 1); // Swipe left
+            if (touchEndX - touchStartX > 50) goToSlide(currentSlide - 1); // Swipe right
+        });
+        setInterval(() => goToSlide(currentSlide + 1), 5000); // Auto-slide
+
+        // Fade-in on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('fade-in');
+            });
+        });
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
