@@ -3,41 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rifrush - AI Audio Mastering: Faster, Cheaper, Pro Sound</title>
+    <meta name="description" content="Rifrush: All-in-one AI music creation tool - generate chords, lyrics, beats, and mix samples. Free demos, premium access for $9/month or $4.99 one-time.">
+    <meta name="keywords" content="music creation tool, chord progression generator, lyric generator, beat maker, MIDI export, AI music tools, free music production">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Rifrush - Create Songs with AI: Chords, Lyrics, Beats">
+    <meta property="og:description" content="Generate chords, lyrics, beats, and mix samples in minutes. Free demos, premium for $9/month. Perfect for indie musicians.">
+    <meta property="og:image" content="https://rifrush.com/assets/og-image.jpg">
+    <meta property="og:url" content="https://rifrush.com">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Rifrush - AI Music Creation">
+    <meta name="twitter:description" content="Create pro songs with AI. Try free now!">
+    <meta name="twitter:image" content="https://rifrush.com/assets/twitter-image.jpg">
+    <link rel="canonical" href="https://rifrush.com">
+    <title>Rifrush - Create Songs with AI: Chords, Lyrics, Beats</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/midi-writer-js@2.1.1/dist/index.umd.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://unpkg.com/wavesurfer.js"></script>
+    <script src="https://coingate.com/js-sdk/v1"></script>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXX');
+    </script>
     <style>
         :root {
-            --bg-primary: #0a0a0a; /* Dark for audio vibe */
+            --bg-primary: #0a0a0a;
             --bg-secondary: #1a1a1a;
-            --accent: linear-gradient(135deg, #ff6b6b, #4ecdc4); /* Vibrant gradient */
+            --accent: linear-gradient(135deg, #ff6b6b, #4ecdc4);
             --text-primary: #ffffff;
             --text-secondary: #b0b0b0;
             --border: #333;
             --shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
+        body.light-mode {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f0f0f0;
+            --text-primary: #0a0a0a;
+            --text-secondary: #606060;
+            --border: #ddd;
+            --shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; transition: all 0.3s; }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
         
         /* Header */
-        header { background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); position: fixed; width: 100%; top: 0; z-index: 100; transition: all 0.3s; }
+        header { background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); position: fixed; width: 100%; top: 0; z-index: 100; }
         header.scrolled { background: var(--bg-secondary); }
         nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; }
         .logo { font-size: 1.5rem; font-weight: 700; background: var(--accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .nav-links { display: flex; list-style: none; gap: 2rem; }
-        .nav-links a { color: var(--text-secondary); text-decoration: none; transition: color 0.3s; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; }
         .nav-links a:hover { color: var(--text-primary); }
-        .cta-header { background: var(--accent); padding: 0.5rem 1rem; border-radius: 50px; color: white; text-decoration: none; font-weight: 600; transition: transform 0.3s; }
+        .cta-header { background: var(--accent); padding: 0.5rem 1rem; border-radius: 50px; color: white; text-decoration: none; font-weight: 600; transition: transform 0.3s; min-height: 48px; display: flex; align-items: center; }
         .cta-header:hover { transform: scale(1.05); }
+        .mobile-menu { display: none; cursor: pointer; font-size: 1.5rem; color: var(--text-primary); }
+        @media (max-width: 768px) { .nav-links { display: none; flex-direction: column; position: absolute; top: 60px; right: 0; background: var(--bg-secondary); width: 200px; padding: 1rem; gap: 1rem; } .nav-links.show { display: flex; } .mobile-menu { display: block; } }
+        
+        /* Mode Toggle */
+        .mode-toggle { display: flex; align-items: center; gap: 0.5rem; margin-left: 1rem; }
+        .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 20px; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #2196F3; }
+        input:checked + .slider:before { transform: translateX(20px); }
         
         /* Hero */
         .hero { padding: 120px 0 80px; text-align: center; background: linear-gradient(to bottom, var(--bg-primary), var(--bg-secondary)); }
         .hero h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 700; margin-bottom: 1rem; }
         .hero p { font-size: 1.2rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto 2rem; }
-        .upload-area { background: var(--bg-secondary); border: 2px dashed var(--border); border-radius: 20px; padding: 3rem; margin: 2rem auto; max-width: 500px; transition: all 0.3s; cursor: pointer; }
-        .upload-area:hover { border-color: #ff6b6b; background: rgba(255,107,107,0.1); }
-        .upload-area.dragover { border-color: #4ecdc4; background: rgba(78,205,196,0.1); }
-        .upload-icon { font-size: 3rem; margin-bottom: 1rem; display: block; }
+        .tabs { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; }
+        .tab-btn { padding: 0.5rem 1rem; background: var(--bg-secondary); border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .tab-btn.active { background: var(--accent); color: white; }
+        .tab-content { display: none; background: var(--bg-secondary); border-radius: 20px; padding: 2rem; max-width: 500px; margin: 0 auto; }
+        .tab-content.active { display: block; }
+        .tab-content input, select, button { padding: 0.75rem; margin: 0.5rem; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-primary); color: var(--text-primary); }
+        .tab-content button { background: var(--accent); cursor: pointer; }
+        .result { margin: 1rem 0; font-size: 1.2rem; }
+        #waveform { width: 100%; height: 128px; margin: 1rem 0; }
         .cta-hero { background: var(--accent); padding: 1rem 2rem; border-radius: 50px; color: white; font-size: 1.1rem; font-weight: 600; text-decoration: none; display: inline-block; transition: all 0.3s; }
         .cta-hero:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
         
@@ -48,7 +98,6 @@
         .feature { text-align: center; padding: 2rem; background: var(--bg-primary); border-radius: 15px; transition: all 0.3s; }
         .feature:hover { transform: translateY(-10px); box-shadow: var(--shadow); }
         .feature-icon { font-size: 3rem; background: var(--accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
-        .feature h3 { font-size: 1.5rem; margin-bottom: 1rem; }
         
         /* How it Works */
         .how { padding: 80px 0; }
@@ -59,7 +108,6 @@
         .step::before { content: ''; position: absolute; top: 50%; left: -50%; width: 100px; height: 2px; background: var(--accent); z-index: -1; }
         .step:nth-child(1)::before { left: 0; }
         .step-number { background: var(--accent); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-weight: 700; }
-        .step h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
         
         /* Pricing */
         .pricing { padding: 80px 0; background: var(--bg-secondary); }
@@ -82,7 +130,7 @@
         /* Testimonials */
         .testimonials { padding: 80px 0; }
         .testimonials h2 { text-align: center; font-size: 2.5rem; margin-bottom: 3rem; }
-        .testimonial-carousel { position: relative; overflow: hidden; max-width: 800px; margin: 0 auto; }
+        .testimonial-carousel { position: relative; overflow: hidden; max-width: 800px; margin: 0 auto; touch-action: pan-y; }
         .slides { display: flex; transition: transform 0.5s; }
         .slide { min-width: 100%; padding: 2rem; text-align: center; opacity: 0.7; transition: opacity 0.5s; }
         .slide.active { opacity: 1; }
@@ -100,9 +148,6 @@
         /* Animations */
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         .fade-in { animation: fadeInUp 0.6s ease-out; }
-        
-        /* Responsive */
-        @media (max-width: 768px) { .nav-links { display: none; } /* Add mobile menu later */ .steps { gap: 1rem; } .step::before { display: none; } }
     </style>
 </head>
 <body>
@@ -113,48 +158,95 @@
                 <li><a href="#features">Features</a></li>
                 <li><a href="#how">How It Works</a></li>
                 <li><a href="#pricing">Pricing</a></li>
-                <li><a href="/login">Login</a></li>
+                <li><a href="/signup">Sign Up</a></li>
             </ul>
-            <a href="/upload" class="cta-header">Start Free</a>
+            <a href="#tools" class="cta-header">Try Free</a>
+            <div class="mode-toggle">
+                <label class="switch">
+                    <input type="checkbox" id="modeSwitch">
+                    <span class="slider"></span>
+                </label>
+                <span>Dark/Light</span>
+            </div>
+            <div class="mobile-menu">☰</div>
         </nav>
     </header>
 
     <section class="hero">
         <div class="container">
-            <h1 class="fade-in">Master Your Music Effortlessly</h1>
-            <p class="fade-in">AI-powered mastering is 3x faster and 50% cheaper than anywhere else. Upload, preview, and download—professional sound in seconds. No account required for your first track.</p>
-            <div class="upload-area fade-in" id="uploadArea">
-                <span class="upload-icon">🎵</span>
-                <p>Drag & drop your track or <strong>click to upload</strong><br>(MP3, WAV – up to 10min free)</p>
-                <input type="file" id="fileInput" accept="audio/*" style="display: none;">
+            <h1 class="fade-in">Create Songs in Minutes</h1>
+            <p class="fade-in">Generate chords, lyrics, beats, and mix samples with AI. Free demos, unlock all tools for $9/month or $4.99 one-time. No account needed to start.</p>
+            <div class="tabs fade-in">
+                <button class="tab-btn active" data-tab="chords">Chords</button>
+                <button class="tab-btn" data-tab="lyrics">Lyrics</button>
+                <button class="tab-btn" data-tab="beats">Beats</button>
+                <button class="tab-btn" data-tab="mixer">Mixer</button>
             </div>
-            <a href="/upload" class="cta-hero fade-in">Try Free Preview Now</a>
+            <div class="tab-content active fade-in" id="chords">
+                <select id="genre-chords">
+                    <option value="pop">Pop</option>
+                    <option value="rock">Rock</option>
+                    <option value="jazz" class="premium">Jazz (premium)</option>
+                </select>
+                <input type="number" id="key-chords" value="60" placeholder="Key (MIDI note, e.g., 60=C4)">
+                <button onclick="generateChords()">Generate & Download MIDI</button>
+                <div id="chords-result" class="result"></div>
+            </div>
+            <div class="tab-content fade-in" id="lyrics">
+                <select id="theme-lyrics">
+                    <option value="love">Love</option>
+                    <option value="pain">Pain</option>
+                    <option value="adventure" class="premium">Adventure (premium)</option>
+                </select>
+                <input type="number" id="lines-lyrics" value="4" placeholder="Lines">
+                <button onclick="generateLyrics()">Generate & Download TXT</button>
+                <div id="lyrics-result" class="result"></div>
+            </div>
+            <div class="tab-content fade-in" id="beats">
+                <select id="genre-beats">
+                    <option value="hiphop">Hip-Hop</option>
+                    <option value="edm">EDM</option>
+                    <option value="rock" class="premium">Rock (premium)</option>
+                </select>
+                <input type="number" id="bpm-beats" value="120" placeholder="BPM">
+                <button onclick="generateBeats()">Generate & Download MIDI</button>
+                <div id="beats-result" class="result"></div>
+                <div id="waveform"></div>
+            </div>
+            <div class="tab-content fade-in" id="mixer">
+                <p>Upload samples to mix (demo mode)</p>
+                <input type="file" id="sample1" accept="audio/*">
+                <input type="file" id="sample2" accept="audio/*">
+                <button onclick="mixSamples()">Mix & Export WAV (premium)</button>
+                <div id="mixer-result" class="result">Full mixing requires backend (coming soon).</div>
+            </div>
+            <a href="#pricing" class="cta-hero">Unlock All Tools</a>
         </div>
     </section>
 
     <section id="features" class="features">
         <div class="container">
-            <h2 class="fade-in">Why Rifrush Beats the Rest</h2>
+            <h2 class="fade-in">Why Rifrush Rocks</h2>
             <div class="features-grid">
                 <div class="feature fade-in">
-                    <div class="feature-icon">⚡</div>
-                    <h3>Instant Results</h3>
-                    <p>AI analyzes and masters in under 30s – no waiting queues like others.</p>
+                    <div class="feature-icon">🎹</div>
+                    <h3>Chord Generator</h3>
+                    <p>Create progressions in any key. MIDI export for DAWs.</p>
                 </div>
                 <div class="feature fade-in">
-                    <div class="feature-icon">💰</div>
-                    <h3>Affordable Pricing</h3>
-                    <p>From $5/track or $29/year unlimited. Free previews forever.</p>
+                    <div class="feature-icon">📜</div>
+                    <h3>Lyric Generator</h3>
+                    <p>Write catchy lyrics with rhymes. TXT export for easy use.</p>
                 </div>
                 <div class="feature fade-in">
-                    <div class="feature-icon">🎛️</div>
-                    <h3>Custom Controls</h3>
-                    <p>Tweak EQ, compression, loudness with sliders – more flexible than basic AI.</p>
+                    <div class="feature-icon">🥁</div>
+                    <h3>Beat Maker</h3>
+                    <p>Generate drum patterns with waveform preview. MIDI export.</p>
                 </div>
                 <div class="feature fade-in">
-                    <div class="feature-icon">📱</div>
-                    <h3>Mobile & Easy</h3>
-                    <p>Works on any device. Simple interface – upload, choose genre, done.</p>
+                    <div class="feature-icon">🎚️</div>
+                    <h3>Sample Mixer</h3>
+                    <p>Mix loops and samples (full in premium).</p>
                 </div>
             </div>
         </div>
@@ -162,22 +254,22 @@
 
     <section id="how" class="how">
         <div class="container">
-            <h2 class="fade-in">How It Works (3 Simple Steps)</h2>
+            <h2 class="fade-in">How It Works</h2>
             <div class="steps">
                 <div class="step fade-in">
                     <div class="step-number">1</div>
-                    <h3>Upload Your Track</h3>
-                    <p>Drag any audio file – we handle everything automatically.</p>
+                    <h3>Choose Your Tool</h3>
+                    <p>Pick chords, lyrics, beats, or mixer from tabs.</p>
                 </div>
                 <div class="step fade-in">
                     <div class="step-number">2</div>
-                    <h3>Preview & Tweak</h3>
-                    <p>Hear before/after. Adjust for your genre (rock, EDM, pop presets).</p>
+                    <h3>Generate & Preview</h3>
+                    <p>Create and tweak in seconds with free demos.</p>
                 </div>
                 <div class="step fade-in">
                     <div class="step-number">3</div>
-                    <h3>Download Pro Master</h3>
-                    <p>Export in high-res (24-bit). Ready for Spotify, YouTube, anywhere.</p>
+                    <h3>Export or Upgrade</h3>
+                    <p>Download basics free, unlock premium for unlimited.</p>
                 </div>
             </div>
         </div>
@@ -185,48 +277,55 @@
 
     <section id="pricing" class="pricing">
         <div class="container">
-            <h2 class="fade-in">Simple, Transparent Pricing</h2>
+            <h2 class="fade-in">Simple Pricing</h2>
             <div class="pricing-toggle">
                 <div class="toggle">
                     <button class="toggle-btn active" data-period="monthly">Monthly</button>
-                    <button class="toggle-btn" data-period="yearly">Yearly</button>
+                    <button class="toggle-btn" data-period="onetime">One-Time</button>
                 </div>
             </div>
             <div class="pricing-grid">
                 <div class="price-card fade-in">
-                    <h3>Free Trial</h3>
+                    <h3>Free Demo</h3>
                     <div class="price-amount">$0</div>
                     <div class="price-period">Forever</div>
                     <ul class="price-features">
-                        <li>1 free master/month</li>
-                        <li>Basic preview</li>
-                        <li>Watermark</li>
+                        <li>Basic chord/lyric/beat demos</li>
+                        <li>5 generations/day</li>
+                        <li>Mixer mockup</li>
                     </ul>
-                    <a href="/upload" class="cta-price">Start Free</a>
+                    <a href="#tools" class="cta-price">Try Free</a>
                 </div>
                 <div class="price-card popular fade-in">
                     <h3>Pro</h3>
-                    <div class="price-amount" data-monthly="$9" data-yearly="$5">9</div>
-                    <div class="price-period" data-monthly="/month" data-yearly="/month (billed yearly)">/month</div>
+                    <div class="price-amount" data-monthly="$9" data-onetime="$4.99">9</div>
+                    <div class="price-period" data-monthly="/month" data-onetime="/one-time">/month</div>
                     <ul class="price-features">
-                        <li>Unlimited masters</li>
-                        <li>Full custom tweaks</li>
-                        <li>No watermark, high-res export</li>
-                        <li>Genre presets + stems</li>
+                        <li>Unlimited generations</li>
+                        <li>All genres/themes</li>
+                        <li>Full mixer (backend)</li>
+                        <li>MIDI/TXT/WAV exports</li>
                     </ul>
-                    <a href="/pricing" class="cta-price">Get Pro</a>
+                    <a href="#premium" class="cta-price">Get Pro</a>
                 </div>
                 <div class="price-card fade-in">
                     <h3>Enterprise</h3>
-                    <div class="price-amount" data-monthly="$19" data-yearly="$12">19</div>
-                    <div class="price-period" data-monthly="/month" data-yearly="/month (billed yearly)">/month</div>
+                    <div class="price-amount" data-monthly="$19" data-onetime="$9.99">19</div>
+                    <div class="price-period" data-monthly="/month" data-onetime="/one-time">/month</div>
                     <ul class="price-features">
-                        <li>All Pro + API access</li>
-                        <li>Team accounts</li>
+                        <li>All Pro features</li>
+                        <li>API access</li>
+                        <li>Team collab tools</li>
                         <li>Priority support</li>
                     </ul>
                     <a href="/contact" class="cta-price">Contact Us</a>
                 </div>
+            </div>
+            <div id="premium" class="fade-in" style="margin-top: 2rem;">
+                <p id="status">Free mode: Basic features only.</p>
+                <button id="stripe-btn" style="display: none;">Pay with Card</button>
+                <button id="usdt-btn" style="display: none;">Pay with USDT</button>
+                <button id="unlock-btn" class="cta-price" onclick="unlockPremium()">Unlock Premium</button>
             </div>
         </div>
     </section>
@@ -237,15 +336,15 @@
             <div class="testimonial-carousel">
                 <div class="slides" id="slides">
                     <div class="slide active">
-                        <div class="quote">"Rifrush turned my demo into radio-ready – cheaper and faster than anything else!"</div>
+                        <div class="quote">"Rifrush is my go-to for quick song ideas – chords and lyrics in one place!"</div>
                         <div class="author">- Alex K., Indie Producer</div>
                     </div>
                     <div class="slide">
-                        <div class="quote">"Love the custom sliders. Finally, AI that listens to my tweaks."</div>
+                        <div class="quote">"The beat generator saved my track. MIDI export is a game-changer."</div>
                         <div class="author">- Maria L., EDM Artist</div>
                     </div>
                     <div class="slide">
-                        <div class="quote">"Free previews sealed the deal. Pro sound without breaking the bank."</div>
+                        <div class="quote">"Free demos are awesome. Can't wait for the full mixer!"</div>
                         <div class="author">- Jamal T., Podcaster</div>
                     </div>
                 </div>
@@ -266,61 +365,164 @@
     </footer>
 
     <script>
-        // Header scroll effect
+        // Header scroll
         window.addEventListener('scroll', () => {
             document.querySelector('header').classList.toggle('scrolled', window.scrollY > 50);
         });
 
-        // Upload drag&drop
-        const uploadArea = document.getElementById('uploadArea');
-        const fileInput = document.getElementById('fileInput');
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            uploadArea.addEventListener(eventName, preventDefaults, false);
+        // Mobile menu
+        document.querySelector('.mobile-menu').addEventListener('click', () => {
+            document.querySelector('.nav-links').classList.toggle('show');
         });
-        function preventDefaults(e) { e.preventDefault(); e.stopPropagation(); }
-        ['dragenter', 'dragover'].forEach(eventName => {
-            uploadArea.addEventListener(eventName, () => uploadArea.classList.add('dragover'), false);
-        });
-        ['dragleave', 'drop'].forEach(eventName => {
-            uploadArea.addEventListener(eventName, () => uploadArea.classList.remove('dragover'), false);
-        });
-        uploadArea.addEventListener('drop', handleDrop, false);
-        uploadArea.addEventListener('click', () => fileInput.click());
-        fileInput.addEventListener('change', (e) => { if (e.target.files[0]) alert('File selected! Redirecting to master...'); });
-        function handleDrop(e) {
-            const dt = e.dataTransfer;
-            const files = dt.files;
-            if (files[0].type.startsWith('audio/')) {
-                fileInput.files = files;
-                alert('Audio uploaded! Processing...');
-            }
-        }
 
-        // Pricing toggle
-        const toggleBtns = document.querySelectorAll('.toggle-btn');
-        const priceAmounts = document.querySelectorAll('.price-amount');
-        const pricePeriods = document.querySelectorAll('.price-period');
-        toggleBtns.forEach(btn => {
+        // Dark/Light mode
+        const modeSwitch = document.getElementById('modeSwitch');
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-mode');
+            modeSwitch.checked = true;
+        }
+        modeSwitch.addEventListener('change', () => {
+            document.body.classList.toggle('light-mode');
+            localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+        });
+
+        // Tabs
+        document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                toggleBtns.forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                 btn.classList.add('active');
-                const period = btn.dataset.period;
-                priceAmounts.forEach((amt, i) => {
-                    amt.textContent = period === 'yearly' ? amt.dataset.yearly : amt.dataset.monthly;
-                });
-                pricePeriods.forEach((per, i) => {
-                    per.textContent = period === 'yearly' ? per.dataset.yearly : per.dataset.monthly;
-                });
+                document.getElementById(btn.dataset.tab).classList.add('active');
             });
         });
 
+        // Premium logic
+        const stripe = Stripe('pk_test_YOUR_KEY');
+        const coingate = new CoinGate('YOUR_API_KEY', { environment: 'sandbox' });
+        const isPremium = localStorage.getItem('rifrush-premium') === 'true';
+        if (isPremium) {
+            document.getElementById('status').textContent = 'Premium unlocked: All features!';
+            document.getElementById('unlock-btn').style.display = 'none';
+            document.querySelectorAll('.premium').forEach(el => el.classList.add('unlocked'));
+            document.querySelectorAll('.premium').forEach(el => el.disabled = false);
+        }
+
+        function unlockPremium() {
+            document.getElementById('stripe-btn').style.display = 'inline-block';
+            document.getElementById('usdt-btn').style.display = 'inline-block';
+            document.getElementById('unlock-btn').style.display = 'none';
+        }
+
+        document.getElementById('stripe-btn').addEventListener('click', async () => {
+            const period = document.querySelector('.toggle-btn.active').dataset.period;
+            const priceId = period === 'monthly' ? 'price_YOUR_MONTHLY_ID' : 'price_YOUR_ONETIME_ID';
+            const { error } = await stripe.redirectToCheckout({
+                lineItems: [{ price: priceId, quantity: 1 }],
+                mode: period === 'monthly' ? 'subscription' : 'payment',
+                successUrl: window.location.href + '?success=true',
+                cancelUrl: window.location.href + '?canceled=true',
+            });
+            if (error) alert(error.message);
+        });
+
+        document.getElementById('usdt-btn').addEventListener('click', async () => {
+            const period = document.querySelector('.toggle-btn.active').dataset.period;
+            const amount = period === 'monthly' ? 9 : 4.99;
+            const order = await coingate.createOrder({
+                order_id: 'rifrush-' + Date.now(),
+                price_amount: amount,
+                price_currency: 'USD',
+                receive_currency: 'USDT',
+                title: 'Rifrush Premium',
+                successUrl: window.location.href + '?crypto_success=true',
+            });
+            if (order.status === 'pending') window.open(order.payment_url, '_blank');
+        });
+
+        if (new URLSearchParams(window.location.search).get('success') || new URLSearchParams(window.location.search).get('crypto_success')) {
+            localStorage.setItem('rifrush-premium', 'true');
+            location.reload();
+        }
+
+        // Chords
+        function generateChords() {
+            const genre = document.getElementById('genre-chords').value;
+            if (genre === 'jazz' && !isPremium) return alert('Jazz requires premium!');
+            const key = parseInt(document.getElementById('key-chords').value) || 60;
+            const progressions = { pop: [0, 7, 5, 2], rock: [0, 7, 4, 10], jazz: [0, 2, 4, 5, 7, 9, 11] };
+            const chords = progressions[genre].map(c => key + c);
+            document.getElementById('chords-result').innerHTML = `Chords: ${chords.map(c => `C${c-60}`).join(' - ')}`;
+            const track = new MidiWriterjs.Track();
+            track.addEvent(new MidiWriterjs.NoteEvent({ pitch: chords, duration: '4', sequential: true }));
+            const write = new MidiWriterjs.Writer(track);
+            const midiBlob = new Blob([write.dataUri()], { type: 'audio/midi' });
+            const url = URL.createObjectURL(midiBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'rifrush-chords.mid';
+            a.click();
+        }
+
+        // Lyrics
+        function generateLyrics() {
+            const theme = document.getElementById('theme-lyrics').value;
+            if (theme === 'adventure' && !isPremium) return alert('Adventure requires premium!');
+            const lines = parseInt(document.getElementById('lines-lyrics').value) || 4;
+            const rhymes = { love: ['dove', 'above', 'glove'], pain: ['rain', 'chain', 'gain'], adventure: ['venture', 'future', 'nature'] };
+            let lyrics = '';
+            for (let i = 0; i < lines; i++) {
+                lyrics += `Line ${i+1}: This is a ${theme} song with ${rhymes[theme][i % rhymes[theme].length]}\n`;
+            }
+            document.getElementById('lyrics-result').textContent = lyrics;
+            const blob = new Blob([lyrics], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'rifrush-lyrics.txt';
+            a.click();
+        }
+
+        // Beats
+        function generateBeats() {
+            const genre = document.getElementById('genre-beats').value;
+            if (genre === 'rock' && !isPremium) return alert('Rock requires premium!');
+            const bpm = parseInt(document.getElementById('bpm-beats').value) || 120;
+            document.getElementById('beats-result').textContent = `Generated ${genre} beat at ${bpm} BPM`;
+            const wavesurfer = WaveSurfer.create({ container: '#waveform', waveColor: '#ff6b6b', progressColor: '#4ecdc4' });
+            wavesurfer.load('/samples/beat-sample.wav'); // Add to repo
+            const track = new MidiWriterjs.Track();
+            track.addEvent(new MidiWriterjs.NoteEvent({ pitch: [36, 38], duration: '8', sequential: true })); // Basic kick/snare
+            const write = new MidiWriterjs.Writer(track);
+            const midiBlob = new Blob([write.dataUri()], { type: 'audio/midi' });
+            const url = URL.createObjectURL(midiBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'rifrush-beats.mid';
+            a.click();
+        }
+
+        // Mixer (mockup)
+        function mixSamples() {
+            if (!isPremium) return alert('Mixing requires premium!');
+            const file1 = document.getElementById('sample1').files[0];
+            const file2 = document.getElementById('sample2').files[0];
+            if (!file1 || !file2) return alert('Upload two samples!');
+            document.getElementById('mixer-result').innerHTML = 'Mixing demo: Combine samples (full WAV export requires backend).';
+            // Future: Web Audio API for client-side mix, backend for export
+        }
+
         // Testimonials carousel
-        const slides = document.getElementById('slides').children;
+        const carousel = document.querySelector('.testimonial-carousel');
+        const slidesContainer = document.getElementById('slides');
+        const slides = slidesContainer.children;
         const dotsContainer = document.getElementById('dots');
         let currentSlide = 0;
+        let touchStartX = 0;
+        let touchEndX = 0;
         for (let i = 0; i < slides.length; i++) {
             const dot = document.createElement('div');
             dot.classList.add('dot');
+            if (i === 0) dot.classList.add('active');
             dot.addEventListener('click', () => goToSlide(i));
             dotsContainer.appendChild(dot);
         }
@@ -331,17 +533,41 @@
             currentSlide = (n + slides.length) % slides.length;
             slides[currentSlide].classList.add('active');
             dots[currentSlide].classList.add('active');
-            document.getElementById('slides').style.transform = `translateX(-${currentSlide * 100}%)`;
+            slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
         }
-        setInterval(() => goToSlide(currentSlide + 1), 5000); // Auto-slide
+        carousel.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; });
+        carousel.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            if (touchStartX - touchEndX > 50) goToSlide(currentSlide + 1);
+            if (touchEndX - touchStartX > 50) goToSlide(currentSlide - 1);
+        });
+        setInterval(() => goToSlide(currentSlide + 1), 5000);
 
-        // Fade-in on scroll
+        // Fade-in
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) entry.target.classList.add('fade-in');
             });
         });
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Pricing toggle
+        const toggleBtns = document.querySelectorAll('.toggle-btn');
+        const priceAmounts = document.querySelectorAll('.price-amount');
+        const pricePeriods = document.querySelectorAll('.price-period');
+        toggleBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                toggleBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const period = btn.dataset.period;
+                priceAmounts.forEach((amt) => {
+                    amt.textContent = period === 'onetime' ? amt.dataset.onetime : amt.dataset.monthly;
+                });
+                pricePeriods.forEach((per) => {
+                    per.textContent = period === 'onetime' ? per.dataset.onetime : per.dataset.monthly;
+                });
+            });
+        });
     </script>
 </body>
 </html>
