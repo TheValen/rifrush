@@ -143,14 +143,14 @@
     <!-- CTA с дополнением -->
     <section class="hero text-center py-5">
         <div class="container">
-            <h3 data-i18n="final-cta">Пишіть прямо зараз і отримайте свій унікальний музичний шедевр! Оплата найзручнішим для вас способом — деталі у приватних!</h3>
+            <h3 data-i18n="final-cta">Пишіть прямо зараз і отримайте свій унікальний музичний шедевр! Оплата будь-яким зручним способом — деталі у приватних!</h3>
             <p data-i18n="style-note">Пісні створюються у культурному, позитивному та надихаючому стилі. Нецензурна лексика та агресивний зміст не використовуються.</p>
-            <button class="cta">Почати замовлення</button>
+            <button class="cta" data-i18n="final-cta-btn">Почати замовлення</button>
         </div>
     </section>
 
     <script>
-        // Language switcher (расширенные переводы, включая преимущества и новые секции)
+        // Language switcher (расширенные переводы, включая кнопку CTA и цены в $ для EN)
         const translations = {
             uk: {
                 'hero-title': 'Створимо унікальну пісню на замовлення для вашого свята!',
@@ -176,7 +176,8 @@
                 'step2': 'Створення мелодії',
                 'step3': 'Правки',
                 'step4': 'Доставка MP3/WAV',
-                'final-cta': 'Пишіть прямо зараз і отримайте свій унікальний музичний шедевр! Оплата найзручнішим для вас способом — деталі у приватних!',
+                'final-cta': 'Пишіть прямо зараз і отримайте свій унікальний музичний шедевр! Оплата будь-яким зручним способом — деталі у приватних!',
+                'final-cta-btn': 'Почати замовлення',
                 'style-note': 'Пісні створюються у культурному, позитивному та надихаючому стилі. Нецензурна лексика та агресивний зміст не використовуються.'
             },
             ru: {
@@ -203,12 +204,13 @@
                 'step2': 'Создание мелодии',
                 'step3': 'Правки',
                 'step4': 'Доставка MP3/WAV',
-                'final-cta': 'Пишите прямо сейчас и получите свой уникальный музыкальный шедевр! Оплата самым удобным для вас способом — детали в личке!',
+                'final-cta': 'Пишите прямо сейчас и получите свой уникальный музыкальный шедевр! Оплата любым удобным способом — детали в личке!',
+                'final-cta-btn': 'Начать заказ',
                 'style-note': 'Песни создаются в культурном, позитивном и вдохновляющем стиле. Нецензурная лексика и агрессивный контент не используются.'
             },
             en: {
                 'hero-title': 'Create a Unique Custom Song for Your Celebration!',
-                'hero-desc': 'Looking for a special gift for a loved one or want to add a highlight to your event? We offer:<br><br><strong>Individual Approach:</strong><br>Send us:<br>• Text or words you want to hear in the song.<br>• Style choice (e.g., pop, rock, retro).<br>• Other wishes (mood, theme, special requests).<br><br><strong>Professional Mastering:</strong><br>We give your song professional sound that meets music industry standards.<br><br><strong>Copyrights:</strong><br>Your song is fully legal for commercial use, download, and distribution.<br><br><strong>Price:</strong><br>Service cost — 500 UAH.<br><br>Want a mixed song with professional sound and copyrights? We offer unique options:<br>• Covers and mixes from the 80s, 90s, 2000s — send your favorite track or your favorite artist\'s track, and our DJ will turn it into something incredible!<br>• Individual approach — you can add your theme, words, poem, or text that the DJ will seamlessly integrate into the mix.<br><br>All this for a small surcharge + 200 UAH to the service cost.<br><br>*Gift emotions that resonate. Order now and get a free demo!*',
+                'hero-desc': 'Looking for a special gift for a loved one or want to add a highlight to your event? We offer:<br><br><strong>Individual Approach:</strong><br>Send us:<br>• Text or words you want to hear in the song.<br>• Style choice (e.g., pop, rock, retro).<br>• Other wishes (mood, theme, special requests).<br><br><strong>Professional Mastering:</strong><br>We give your song professional sound that meets music industry standards.<br><br><strong>Copyrights:</strong><br>Your song is fully legal for commercial use, download, and distribution.<br><br><strong>Price:</strong><br>Service cost — $12.<br><br>Want a mixed song with professional sound and copyrights? We offer unique options:<br>• Covers and mixes from the 80s, 90s, 2000s — send your favorite track or your favorite artist\'s track, and our DJ will turn it into something incredible!<br>• Individual approach — you can add your theme, words, poem, or text that the DJ will seamlessly integrate into the mix.<br><br>All this for a small surcharge + $5 to the service cost.<br><br>*Gift emotions that resonate. Order now and get a free demo!*',
                 'cta': 'Order Song',
                 'services-title': 'Our Services',
                 'service1': 'Song Under Key',
@@ -219,18 +221,19 @@
                 'service3-desc': 'Video clip, translation, personalization.',
                 'adv-title': 'Why Rifrush?',
                 'adv1': '⚡ Fast: 1–2 days per track',
-                'adv2': '💰 Affordable: from 500 UAH',
+                'adv2': '💰 Affordable: from $12',
                 'adv3': '🛡️ Rights: Full commercial',
                 'adv4': '🎯 Personalized: Based on your story',
                 'adv5': '✨ Experience: 100+ tracks per year',
                 'mix-title': 'Mixes and Covers',
-                'mix-desc': 'Want a mixed song with professional sound? +200 UAH to base price. Send your favorite track — we\'ll turn it into a masterpiece!',
+                'mix-desc': 'Want a mixed song with professional sound? +$5 to base price. Send your favorite track — we\'ll turn it into a masterpiece!',
                 'how-title': 'How It Works?',
                 'step1': 'Describe Your Idea',
                 'step2': 'Melody Creation',
                 'step3': 'Revisions',
                 'step4': 'Delivery MP3/WAV',
-                'final-cta': 'Write right now and get your unique musical masterpiece! Payment in the most convenient way for you — details in DM!',
+                'final-cta': 'Write right now and get your unique musical masterpiece! Payment accepted by any convenient method — details in DM!',
+                'final-cta-btn': 'Start Order',
                 'style-note': 'Songs are created in a cultural, positive, and inspiring style. No profanity or aggressive content is used.'
             }
         };
